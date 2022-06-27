@@ -1,0 +1,94 @@
+<snippet>
+	<content><![CDATA[
+vector<int> arr{0,1,2,3,4,5,6,7};
+       // for(auto x: arr)
+       //  cout<<x<<" ";
+       // cout<<endl;
+
+       vector<ll>res(8,0);
+     
+       // .....................................................
+       for(int i=0;i<8;i++){      // brute forces 4^n
+        cout<<i<<" ";
+         for(int j=0;j<8;j++)
+          if((i&j)==j){
+            cout<<j<<" ";
+            res[i]+=j+1;
+          }
+          cout<<endl;
+
+       }
+       for(auto  x: res)
+        cout<<x<<" ";
+       cout<<endl<<endl;
+       // ..........................................................
+       // 0 1 2 6 4 10 12 28 
+       // mon only subset of i
+
+
+       // ..........................................................
+       // for(int i=0;i<8;i++){       // 3^n
+       //   res[i]+=0;     // we need to take zero(subset of i) as separate case
+       //   for(int j=i;j;j=(j-1)&i){
+       //      res[i]+=j;
+       //   }
+       // }
+       // for(auto x: res)
+       //  cout<<x<<" ";
+       // cout<<endl;
+       // // 0 1 2 6 4 10 12 28 
+       // ...............................................................
+
+
+
+       vector<ll> dp(8,0);
+       // ..........................WRONG SOLUTION.........................................
+       // for(int i=0;i<8;i++)
+       //  dp[i]=i+1;  // separate case  i is subset of i (when no bit is set off)
+       // for(int i=0;i<8;i++){   //  <(1<<n)  // n*2^n   see notes
+            
+       //   for(int j=0;j<3;j++){  // <n
+       //      if(i&(1<<j))
+       //        dp[i]+=dp[i^(1<<j)];
+       //   }
+       // }
+       // for(auto x: dp)
+       //  cout<<x<<" ";
+       // cout<<endl;
+
+
+       // problem:
+       //  a/c to this solution
+       //     dp[111]= 7 + dp[110]+dp[101]+dp[011]
+
+       //     and dp[110]=(6+dp[100]+dp[010])=(6+4+0+2+0)=(6+4+2+0+0)
+       //     and dp[011]=(3+dp[010]+dp[001])=(3+2+0+1+0)=(3+2+1+0+0)
+       //     and dp[101]=(5+dp[100]+dp[001])=(5+4+0+1+0)=(5+4+1+0+0)
+
+       //     so dp[111]=(7+6+5+4+4+3+2+2+1+1+0+0+0+0+0+0)
+
+       //     since here i=0  is zero other wise i would be more different
+
+             // solution:  just swap the loop
+       // ...........................................................................................
+
+         // BELOW IS PERFECT SOLUTION
+     
+       for(int i=0;i<8;i++)
+        dp[i]=i+1;  // separate case  i is subset of i (when no bit is set off)
+       for(int j=0;j<3;j++){   //  <(1<<n)  // n*2^n   see notes
+         for(int i=0;i<8;i++){  // <n
+            if(i&(1<<j))
+              dp[i]+=dp[i^(1<<j)];
+         }
+       }
+       for(auto x: dp)
+        cout<<x<<" ";
+       cout<<endl;
+  
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>sos</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

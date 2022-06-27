@@ -1,0 +1,53 @@
+<snippet>
+	<content><![CDATA[
+int timer;
+int l=log2(N);
+vector<int> tin(N), tout(N);
+int dp[N][l+1];
+/*
+For each node we will precompute its ancestor above him, its ancestor two nodes above, 
+its ancestor four above, etc. Let's store them in the array up, i.e. 
+up[i][j] is the 2^j-th ancestor above the node i
+*/
+// initialize tin(0)=0,tout(0)=MAX
+// always vertice indice start from 1, dfs(1,0)
+void dfs(int v, int p)
+{
+    tin[v] = ++timer;
+    dp[v][0] = p;
+    for (int i = 1; i <= l; ++i)
+       if(dp[v][i-1] && dp[dp[v][i-1]][i-1])
+        dp[v][i] = dp[dp[v][i-1]][i-1];
+
+    for (int u : g[v]) {
+        if (u != p)
+            dfs(u, v);
+    }
+
+    tout[v] = ++timer;
+}
+
+bool is_ancestor(int u, int v)  // u is parent of v
+{
+    return tin[u] <= tin[v] && tout[u] >= tout[v];
+}
+
+int lca(int u, int v)
+{
+    if (is_ancestor(u, v))
+        return u;
+    if (is_ancestor(v, u))
+        return v;
+    for (int i = l; i >= 0; --i) {
+         if(!dp[u][i])continue;
+        if (!is_ancestor(dp[u][i], v))
+            u = dp[u][i];
+    }
+    return dp[u][0];
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>lowestcommon</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

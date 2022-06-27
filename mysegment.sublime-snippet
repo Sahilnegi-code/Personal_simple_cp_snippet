@@ -1,0 +1,100 @@
+<snippet>
+	<content><![CDATA[
+// make array size global n
+//  update build nlogn
+// normal build n
+struct  node
+{
+    ll x;
+    node(ll val=MAX){
+      x=val;
+    }
+};
+class sg{
+
+    public:
+    vector<node> seg,lazy;
+    int N;
+    sg(int n){
+           
+           seg.resize(4*n);
+           lazy.resize(4*n);
+           N=n;
+    }
+    // void push(int si,int ss, int se)
+    // {
+    //             if(se!=ss)
+    //             {
+    //                 lazy[2*si+1]+=lazy[si];
+    //                 lazy[2*si+2]+=lazy[si];
+    //             }
+    //             lazy[si]=0;
+    // }
+    void merge(node & cur,node & left,node & right){
+              cur.x=min(left.x,right.x);
+    }
+    node Query(int qs,int qe,int si,int ss,int se){ 
+
+             // if(lazy[si]!=0) // if using lazy propogation
+             // {
+             //    seg[si]+=lazy[si];
+             //    push(si,ss,se);
+             // }
+       
+             if(ss>qe||se<qs||ss>se)
+              return node() ;
+             if(ss>=qs&&se<=qe)
+              return seg[si];
+             int mid=(se+ss)/2;
+             node le=Query(qs,qe,2*si+1,ss,mid);
+             node ri=Query(qs,qe,2*si+2,mid+1,se);
+             node res;
+             merge(res,le,ri);
+             return res;
+    }
+    void Update(int qs,int qe,int diff,int si,int ss,int se)
+    {
+
+                // if(lazy[si]!=0)                // lazy if valid to use if we need to update range;
+                // {
+                //        seg[si]+=lazy[si];
+                //        push(si,ss,se);
+                // }
+                if(ss>qe||se<qs||ss>se)
+                    return ;
+                if(ss>=qs&&se<=qe)
+                 {
+
+                   // seg[si]+=diff;
+                   // push(si,ss,se);
+                   seg[si]=node(diff);
+
+                   return ;
+                 }
+
+            int mid=(se+ss)/2;
+
+            Update(qs,qe,diff,2*si+1,ss,mid);
+            Update(qs,qe,diff,2*si+2,mid+1,se);
+
+            merge(seg[si],seg[2*si+1],seg[2*si+2]);
+    }
+    void Build(vector<ll> &a,int si,int ss,int se)
+    {        if(ss>se) return;
+             if(ss==se){
+             seg[si]=node(a[ss]);return ;}
+             int mid=(ss+se)/2;
+             Build(a,2*si+1,ss,mid);
+             Build(a,2*si+2,mid+1,se);
+             merge(seg[si],seg[2*si+1],seg[2*si+2]);
+    }
+    void build(vector<ll> &a){ Build(a,0,0,N-1);}
+    node query(ll qs,ll qe){ return Query(qs,qe,0,0,N-1);}
+    void update(ll qs,ll qe,ll val){ Update(qs,qe,val,0,0,N-1);}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>my</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

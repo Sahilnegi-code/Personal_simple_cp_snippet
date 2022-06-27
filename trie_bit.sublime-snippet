@@ -1,0 +1,79 @@
+<snippet>
+	<content><![CDATA[
+class Trie
+{
+     public:
+      Trie* bit[2];
+      Trie(){
+        bit[0]=NULL;
+        bit[1]=NULL;
+      }
+      void insert(ll val){
+            Trie* cur=this;
+
+              for(int i=19;i>=0;i--){
+                 ll bits=(1<<i)&val;
+                 if(bits)bits=1;
+                 if(cur->bit[bits]==NULL)
+                  cur->bit[bits]=new Trie();
+                  cur=cur->bit[bits];
+              }
+      }
+      ll getmin(ll val){
+        Trie* cur=this;
+              ll ans=0;
+              for(int i=19;i>=0;i--){
+                 ll bits=(1<<i)&val;
+                 if(bits)bits=1;
+                 if(cur->bit[bits])
+                  cur=cur->bit[bits];
+                 else
+                  cur=cur->bit[1-bits],ans|=(1<<i);
+              }
+              return ans;
+      }
+      ll getmax(ll val){
+        Trie* cur=this;
+             ll ans=0;
+              for(int i=19;i>=0;i--){
+                 ll bits=(1<<i)&val;
+                 if(bits)bits=1;
+                 if(cur->bit[1-bits])
+                  cur=cur->bit[1-bits],ans|=(1<<i);
+                else
+                  cur=cur->bit[bits];
+              }
+              return ans;
+      }
+      Trie* Delete(ll val,Trie* curr,int depth=30){
+              
+            ll bits=(1<<depth)&val;
+            if(bits)bits=1;
+            if(depth==-1){
+              curr->count--;
+              if(curr->count==0)
+              {
+                  delete(curr);
+                  curr=NULL;
+              }
+                
+              return curr;
+
+
+            }
+            curr->bit[bits]=Delete(val,curr->bit[bits],depth-1);
+            if(!curr->bit[bits] && !curr->bit[1-bits]){
+              delete(curr);
+              curr=NULL;}
+              return curr;
+              
+      }
+      
+};
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>triebit</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

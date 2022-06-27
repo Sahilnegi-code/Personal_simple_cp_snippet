@@ -1,0 +1,42 @@
+<snippet>
+	<content><![CDATA[
+vector<bool> linearsieve (int n) {
+   // O(n)
+   // INTUITION
+   /*
+      in the previous seive we were hitting composite with each prime factor
+      right now we will hit composite no. only one time
+      how? (we have decided to hit composite no. only by their smallest prime factor)
+
+      break composite no. N=p*i , where p is smallest prime factor of N
+
+      for this i%prime[j] ==0 break ?
+
+      why?
+
+      let say i is 4 and in prime({2,4})
+
+      we will update 4*2=8 but not 4*3 = 12 because 3 is not smallest prime factor for 12(and also further 4*x x>3 and prime)
+
+      because 4%2==0 mean two is smallest prime factor so we will only hit by 2 at i=6
+
+   */
+   vector<bool> iscomp(n,false);
+   iscomp[0]=true;
+   iscomp[1]=true;
+   vector <int> prime;
+   for (int i = 2; i < n; ++i) {
+      if (!iscomp[i]) prime.push_back (i);
+      for (int j = 0; j < prime.size () && i * prime[j] < n; ++j) {
+         iscomp[i * prime[j]] = true;
+         if (i % prime[j] == 0) break;
+      }
+   }
+   return iscomp;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>linearsoe</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

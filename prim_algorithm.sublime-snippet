@@ -1,0 +1,41 @@
+<snippet>
+	<content><![CDATA[
+ll dijkstra(ll source, vector<pair<ll,ll>> g[],ll n){
+        
+           vector<ll> dis(n,MAX);
+           dis[source]=0;
+
+           priority_queue<pair<ll,ll>,vector<pair<ll,ll>> ,greater<pair<ll,ll>>> pq;
+           pq.push({0,source});
+           vector<ll> visi(n+1,0);
+           ll sum=0;
+           while(!pq.empty()){
+                 ll d=pq.top().first;
+                 ll u=pq.top().second;
+                 pq.pop();
+                 if(visi[u])continue;
+                 visi[u]=1;
+                 // cout<<u<<" "<<d<<endl;
+
+                 sum+=d;
+                 for(auto x: g[u]){
+                    ll v=x.first;
+                    ll w=x.second;
+                    if(visi[v])continue;
+                    if(dis[v]>w){
+
+                      dis[v]=w;
+                      pq.push({dis[v],v});
+                    }
+                 }
+
+           }
+           return sum;
+
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>prim</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

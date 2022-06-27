@@ -1,0 +1,23 @@
+<snippet>
+	<content><![CDATA[
+// ...........................................................
+inline ll modu(ll val , ll modul){return (val%modul+modul)%modul;}
+inline ll madd(ll x,ll y,ll mod=mod){ return (x%mod +y%mod)%mod;}
+inline ll mmul(ll x,ll y,ll mod=mod){ return (x%mod * y%mod)%mod;}
+inline ll msub(ll x,ll y,ll mod=mod){return (mod+x%mod -y%mod)%mod;}
+ll gcd(ll a,ll b){if(b==0) return a;return gcd(b,a%b);}
+// x%mod * a%mod  this can be overflow  10^11*10^7 may therefore we need > long long (64 bit)
+//  either use incuit int_128 or use upper multiplication with time complexity log b
+ll powmod(ll a, ll mod,ll p){ if(p==0) return 1;  ll res; ll x=powmod(a,mod,p/2); res=x;if(p&1) x=mmul(x,a,mod);   return mmul(x,res,mod);}
+ll exp(ll a,ll p){ if(p==0) return 1;  ll res; ll x=exp(a,p/2); res=x;if(p&1) x=(x * a);   return (x * res);}
+ll sqt(ll x){  ll l=1LL;  ll r=x;  ll res; while(l<=r){ ll mid=l+(r-l)/2; if(mid*mid<=x){res=mid; l=mid+1;}else r=mid-1;   } return res;}
+// sqrt(n)
+bool isprime(ll n){   for(int i=2;i<=sqt(n);i++) if(n%i==0)return 0; return 1;}
+int di[8]={-1,-1,-1,1,1,1,0,0};int dj[8]={-1,0,1,-1,0,1,-1,1};int ii[4]={0,0,-1,1};int jj[4]={-1,1,0,0}; 
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>extra</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

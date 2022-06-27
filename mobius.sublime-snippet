@@ -1,0 +1,42 @@
+<snippet>
+	<content><![CDATA[
+/*
+
+// this idea is valid for all multiplicative function and we can also find then like this
+
+For the Möbius function the three cases are:
+1) if x is prime: mobius[x]=-1 (obiously the number of prime factors of a prime number is odd)
+2) x=ip and i%p!=0: mobius[x]=mobius[i]*mobius[j] (since the function is multiplicative)
+3) x=ip and i%p==0: mobius[x]=0 (p^2 divides x)
+
+*/
+vector <ll> prime;
+bool is_composite[N];
+ll mob[N];
+
+void mobius(ll n) {
+	for(int i=0;i<=n;i++)
+	is_composite[i]=false;
+	mob[1] = 1;
+	for (int i = 2; i < n; ++i) {
+		if (!is_composite[i]) {
+			prime.push_back (i);
+			mob[i] = -1;					//i is prime
+		}
+		for (int j = 0; j < prime.size () && i * prime[j] < n; ++j) {
+			is_composite[i * prime[j]] = true;
+			if (i % prime[j] == 0) {
+				mob[i * prime[j]] = 0;	//prime[j] divides i
+				break;
+			} else {
+				mob[i * prime[j]] = mob[i] * mob[prime[j]];	//prime[j] does not divide i
+			}
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>mobius</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

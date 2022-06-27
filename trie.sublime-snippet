@@ -1,0 +1,82 @@
+<snippet>
+	<content><![CDATA[
+// A Trie node
+struct Trie
+{
+  bool isLeaf;
+  unordered_map<char, Trie*> child;
+};
+Trie* getNewTrieNode()
+{
+  Trie* node = new Trie;
+  node->isLeaf = false;
+  return node;
+}
+void insert(Trie* head, string str)
+{
+  Trie* curr = head;
+    int i=0;
+  while (i<str.size())
+  {
+    if (curchild.find(str[i]) == curr->child.end())
+      curr->child[str[i]] = getNewTrieNode();
+    curr = curr->child[str[i]];
+    i++;
+  }
+  curr->isLeaf = true;
+}
+Trie* deletion(Trie* curr, string str ,int depth=0)
+{
+  if (curr == NULL)
+    return NULL;
+  if(depth==str.size()){
+        curr->isLeaf=false;
+        if(curr->child.empty()){
+          delete (curr);
+          curr=NULL;
+        }
+        return curr;
+  }
+  curr->child[str[depth]]=deletion(curr->child[str[depth]],str,depth+1);
+  if(!curr->child[str[depth]]&&curr->isLeaf==false)
+  {
+    if(curr->child.size()==1){
+    delete curr;
+    curr=NULL;}
+    else{
+      curr->child.erase(str[depth]);
+    }
+  }
+
+  if(depth==0 && !curr)
+    return getNewTrieNode();
+  else
+   return curr;
+}
+bool search(Trie* head, string  str)
+{
+  Trie* curr = head;
+  int i=0;
+  while (i<str.size())
+  {
+    curr = curr->child[str[i]];
+    if (curr == nullptr)
+      return false;
+    i++;
+  }
+  return curr->isLeaf;
+}
+void printt(Trie* head,string temp=""){
+        for(auto x: head->child){
+            temp+=x.first;
+            printt(x.second,temp);
+            temp.pop_back();
+        }
+        cout<<temp<<endl;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>trie</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

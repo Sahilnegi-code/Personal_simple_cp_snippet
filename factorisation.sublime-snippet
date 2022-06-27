@@ -1,0 +1,27 @@
+<snippet>
+	<content><![CDATA[
+vector<ll> factorisation(ll n)
+{
+        // worst case time complexity--> sqrt(n) prime
+        vector<ll> res;
+        for(ll i=2,d=1;i*i<=n && res.size()<=3;i+=d,d=2)
+        {
+//        	  cout<<i<<" ";
+              while(n%i==0)
+              {
+                 res.push_back(i);
+                 n/=i;
+
+              }
+        }
+        if(n>1)
+          res.push_back(n);
+        return res;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>factorisation</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

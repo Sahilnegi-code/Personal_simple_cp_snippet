@@ -1,0 +1,30 @@
+<snippet>
+	<content><![CDATA[
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+typedef tree< int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> os;
+/*
+  like the set(unique and sorted value)
+  os.insert()
+
+    // value at 3rd index in sorted array.
+    
+    *p.find_by_order(3);  (index start from 0 so 3rd mean 4th element)
+  
+    // index of number 6 (which exist in set currently)
+
+    p.order_of_key(6)
+  
+    // number 7 not in the set but it will show the 
+    // index number if it was there in sorted array.
+    
+    p.order_of_key(7)
+
+*/
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>policy</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

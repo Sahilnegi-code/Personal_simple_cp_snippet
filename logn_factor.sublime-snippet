@@ -1,0 +1,55 @@
+<snippet>
+	<content><![CDATA[
+ll spf[N]; 
+  
+// Calculating SPF (Smallest Prime Factor) for every 
+// number till MAXN. 
+// Time Complexity : O(nloglogn) 
+void sieve() 
+{ 
+    spf[1] = 1; 
+    for (int i=2; i<N; i++) 
+  
+        // marking smallest prime factor for every 
+        // number to be itself. 
+        spf[i] = i; 
+  
+    // separately marking spf for every even 
+    // number as 2 
+    for (int i=4; i<N; i+=2) 
+        spf[i] = 2; 
+  
+    for (int i=3; i*i<N; i++) 
+    { 
+        // checking if i is prime 
+        if (spf[i] == i) 
+        { 
+            // marking SPF for all numbers divisible by i 
+            for (int j=i*i; j<N; j+=i) 
+  
+                // marking spf[j] if it is not  
+                // previously marked 
+                if (spf[j]==j) 
+                    spf[j] = i; 
+        } 
+    } 
+} 
+  
+//  O(log n)
+vector<ll> getFactorization(ll x) 
+{ 
+    vector<ll> ret; 
+    while (x != 1) 
+    { 
+        ret.push_back(spf[x]); 
+        x = x / spf[x]; 
+    } 
+    return ret; 
+} 
+  
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>lognfactor</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

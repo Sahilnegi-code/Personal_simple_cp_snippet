@@ -1,0 +1,326 @@
+<snippet>
+	<content><![CDATA[
+template<const int MOD>
+struct modular_int{
+	int x;
+	static vector<int> inverse_list ;
+	const static int inverse_limit;
+	const static bool is_prime;
+	modular_int(){
+		x = 0;
+	}
+	template<typename T>  
+	modular_int(const T z){
+		x = (z%MOD);
+		if (x < 0) x += MOD; 	
+	}
+	modular_int(const modular_int<MOD>* z){
+		x = z->x;
+	}
+	modular_int(const modular_int<MOD>& z){
+		x = z.x;
+	}
+	modular_int operator - (const modular_int<MOD>& m) const{
+		modular_int<MOD> U;
+		U.x = x - m.x;
+		if (U.x < 0) U.x += MOD;
+		return U;
+	}
+	modular_int operator + (const modular_int<MOD>& m) const{
+		modular_int<MOD> U;
+		U.x = x + m.x;
+		if (U.x >= MOD) U.x -= MOD;
+		return U;
+	}
+	modular_int& operator -= (const modular_int<MOD>& m){
+		x -= m.x;
+		if (x < 0) x += MOD;
+		return *this;
+	}	
+	modular_int& operator += (const modular_int<MOD>& m){
+		x += m.x;
+		if (x >= MOD) x -= MOD;
+		return *this;
+	}	
+	modular_int operator * (const modular_int<MOD>& m) const{
+		modular_int<MOD> U;
+		U.x = (x* 1ull * m.x) %MOD;
+		return U;
+	}
+	modular_int& operator *= (const modular_int<MOD>& m){
+		x = (x * 1ull * m.x)%MOD;
+		return *this;
+	}
+	template<typename T>
+	friend modular_int operator + (const T &l, const modular_int<MOD>& p){
+		return (modular_int<MOD>(l) + p);
+	}
+	template<typename T>
+	friend modular_int operator - (const T &l, const modular_int<MOD>& p){
+		return (modular_int<MOD>(l) - p);
+	}
+	template<typename T>
+	friend modular_int operator * (const T &l, const modular_int<MOD>& p){
+		return (modular_int<MOD>(l) * p);
+	}
+	template<typename T>
+	friend modular_int operator / (const T &l, const modular_int<MOD>& p){
+		return (modular_int<MOD>(l) / p);
+	}
+ 
+	int value() const{
+		return x;
+	}
+ 
+	modular_int operator ^ (const modular_int<MOD>& cpower) const{
+		modular_int<MOD> ans;
+		ans.x = 1;
+		modular_int<MOD> curr(this);
+		int power = cpower.x;
+ 
+		if (curr.x <= 1){
+			if (power == 0) curr.x = 1;
+			return curr;
+		}
+		while( power > 0){
+			if (power&1){
+				ans *= curr;
+			}
+			power >>= 1;
+			if (power) curr *= curr;
+		}
+		return ans;
+	}
+ 
+ 
+	modular_int operator ^ (long long power) const{
+		modular_int<MOD> ans;
+		ans.x = 1;
+		modular_int<MOD> curr(this);
+		if (curr.x <= 1){
+			if (power == 0) curr.x = 1;
+			return curr;
+		}
+		// Prime Mods
+		if (power >= MOD && is_prime){
+			power %= (MOD - 1);
+		}
+ 
+		while( power > 0){
+			if (power&1){
+				ans *= curr;
+			}
+			power >>= 1;
+			if (power) curr *= curr;
+ 
+		}
+		return ans;
+	}
+ 
+	modular_int operator ^ (int power) const{
+		modular_int<MOD> ans;
+		ans.x = 1;
+		modular_int<MOD> curr(this);
+		
+		if (curr.x <= 1){
+			if (power == 0) curr.x = 1;
+			return curr;
+		}
+		while( power > 0){
+			if (power&1){
+				ans *= curr;
+			}
+			power >>= 1;
+			if (power) curr *= curr;
+ 
+		}
+		return ans;
+	}
+	
+	template<typename T>
+	modular_int& operator ^= (T power) {
+		modular_int<MOD> res = (*this)^power;
+		x = res.x;
+		return *this;
+	}
+ 
+ 
+	template<typename T>
+	modular_int pow(T x){
+		return (*this)^x;
+	}
+ 
+	
+	pair<long long,long long> gcd(const int a, const int b) const {
+		if (b==0) return {1,0}; 
+		pair<long long,long long> c = gcd(b , a%b);
+		return { c.second , c.first - (a/b)*c.second}; 
+	}
+ 
+	inline void init_inverse_list() const {
+		
+		vector<int>& dp = modular_int<MOD>::inverse_list;
+		dp.resize(modular_int<MOD>::inverse_limit + 1);
+		int n = modular_int<MOD>::inverse_limit;
+		dp[0] = 1;
+		if (n > 1) dp[1] = 1;
+		for(int i = 2; i <= n; ++i){
+			dp[i] = (dp[MOD%i] * 1ull *(MOD - MOD/i))%MOD;
+		}
+	
+	}
+	modular_int<MOD> get_inv() const {
+		if (modular_int<MOD>::inverse_list.size() < modular_int<MOD>::inverse_limit + 1) init_inverse_list();
+ 
+		if (this->x <= modular_int<MOD>::inverse_limit){
+			return modular_int<MOD>::inverse_list[this->x];
+		}
+		pair<long long,long long> G = gcd(this->x,MOD);
+		return modular_int<MOD>(G.first);
+	}
+	modular_int<MOD> operator - () const {
+		modular_int<MOD> v(0);
+		v -= (*this);
+		return v;
+	}
+	modular_int operator / (const modular_int<MOD>& m) const{
+		modular_int<MOD> U(this);
+		U *= m.get_inv();
+		return U;
+	}
+	modular_int& operator /= (const modular_int<MOD>& m){
+		(*this) *= m.get_inv();
+		return *this;
+	}
+	bool operator==(const modular_int<MOD>& m) const{
+		return x == m.x;
+	}
+ 
+	bool operator < (const modular_int<MOD>& m) const {
+		return x < m.x;
+	}
+ 
+ 
+	template<typename T>
+	bool operator == (const T& m) const{
+		return (*this)== (modular_int<MOD>(m));
+	}
+ 
+	template<typename T>
+	bool operator < (const T& m) const {
+		return x < (modular_int<MOD>(m)).x;
+	}
+	template<typename T>
+	bool operator > (const T& m) const {
+		return x > (modular_int<MOD>(m)).x;
+	}
+	template<typename T>
+	friend bool operator == (const T& x, const modular_int<MOD>& m) {
+		return (modular_int<MOD>(x)).x == m.x;
+	}
+	template<typename T> 
+	friend bool operator < (const T& x, const modular_int<MOD>& m){
+		return (modular_int<MOD>(x)).x < m.x;
+	}
+	template<typename T> 
+	friend bool operator > (const T& x, const modular_int<MOD>& m){
+		return (modular_int<MOD>(x)).x > m.x;
+	}
+ 
+	friend istream& operator >> (istream& is, modular_int<MOD>& p){
+		int64_t val;
+		is >> val;
+		p.x = (val%MOD);
+		if (p.x < 0) p.x += MOD;
+		return is;
+	}
+	friend ostream& operator << (ostream& os, const modular_int<MOD>& p) {return os<<p.x;}
+ 
+ 
+ 
+};
+......................................................................
+int norm(int x) {
+    if (x < 0) {
+        x += P;
+    }
+    if (x >= P) {
+        x -= P;
+    }
+    return x;
+}
+template<class T>
+T power(T a, i64 b) {
+    T res = 1;
+    for (; b; b /= 2, a *= a) {
+        if (b % 2) {
+            res *= a;
+        }
+    }
+    return res;
+}
+struct Z {
+    int x;
+    Z(int x = 0) : x(norm(x)) {}
+    Z(i64 x) : x(norm(x % P)) {}
+    int val() const {
+        return x;
+    }
+    Z operator-() const {
+        return Z(norm(P - x));
+    }
+    Z inv() const {
+        assert(x != 0);
+        return power(*this, P - 2);
+    }
+    Z &operator*=(const Z &rhs) {
+        x = i64(x) * rhs.x % P;
+        return *this;
+    }
+    Z &operator+=(const Z &rhs) {
+        x = norm(x + rhs.x);
+        return *this;
+    }
+    Z &operator-=(const Z &rhs) {
+        x = norm(x - rhs.x);
+        return *this;
+    }
+    Z &operator/=(const Z &rhs) {
+        return *this *= rhs.inv();
+    }
+    friend Z operator*(const Z &lhs, const Z &rhs) {
+        Z res = lhs;
+        res *= rhs;
+        return res;
+    }
+    friend Z operator+(const Z &lhs, const Z &rhs) {
+        Z res = lhs;
+        res += rhs;
+        return res;
+    }
+    friend Z operator-(const Z &lhs, const Z &rhs) {
+        Z res = lhs;
+        res -= rhs;
+        return res;
+    }
+    friend Z operator/(const Z &lhs, const Z &rhs) {
+        Z res = lhs;
+        res /= rhs;
+        return res;
+    }
+    friend std::istream &operator>>(std::istream &is, Z &a) {
+        i64 v;
+        is >> v;
+        a = Z(v);
+        return is;
+    }
+    friend std::ostream &operator<<(std::ostream &os, const Z &a) {
+        return os << a.val();
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>mint</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

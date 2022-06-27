@@ -1,0 +1,26 @@
+<snippet>
+	<content><![CDATA[
+struct CustomCompare
+{
+    bool operator()(const int& lhs, const int& rhs)
+    {
+        return lhs < rhs;
+    }
+};
+void SamplePriorityQueueWithCustomComparator()
+{
+    priority_queue<int,vector<int>, CustomCompare > pq;
+
+    pq.push(3);
+    pq.push(5);
+    pq.push(1);
+    pq.push(8);
+
+    printQueue(pq);
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>comparatorpq</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

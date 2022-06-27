@@ -1,0 +1,50 @@
+<snippet>
+	<content><![CDATA[
+vector<int> g[100001],rev[100001];
+stack<ll> st;
+void dfs1(int i,vector<int> &visi){
+	 visi[i]=1;
+	 for(auto x: g [i]){
+	 	if(visi[x]) continue;
+	 	dfs1(x,visi);
+	 }
+	 st.push(i);
+}
+void dfs2(int i,vector<int> &visi,unordered_map<int,ll> & mp){
+	 visi[i]=1;
+	 mn_in_col[colour]=min(mn_in_col[colour],val[i]);
+	 mp[val[i]]++;
+     
+	 for(auto x: rev[i]){
+	 	if(visi[x]) continue;
+	 	dfs2(x,visi,mp);
+	 }
+}
+void kosaraju(){
+		  vector<int> visi(n+1,0);
+			  for(int i=1;i<=n;i++){
+			  	 if(!visi[i])
+			  	 	dfs1(i,visi);
+			  }
+			  fill(visi.begin(),visi.end(),0);
+			  ll res=0;
+			  ll pr=1;
+			  while(!st.empty()){
+			  	 ll x=st.top(); st.pop();
+			  	 unordered_map<int,ll> mp;
+			  	 if(!visi[x]){
+			  	 	dfs2(x,visi,mp);
+			  	 	res+=mn_in_col[colour];
+			  	 	pr=(pr%mod *mp[mn_in_col[colour]]%mod)%mod;
+			  	 	colour++;
+			  	 }
+			  }
+			  cout<<res<<" "<<pr<<endl;
+
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>kosaraju</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

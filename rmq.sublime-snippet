@@ -1,0 +1,72 @@
+<snippet>
+	<content><![CDATA[
+class sg{
+
+    public:
+    	vector<ll> seg,lazy;
+        sg(ll n){
+        	 
+        	 seg.resize(4*n,0);
+        	 lazy.resize(4*n,0);
+        }
+        void push(ll si,ll ss, ll se,ll val)
+        {
+        			if(se!=ss)
+            		{
+                		lazy[2*si+1]+=val;
+                		lazy[2*si+2]+=val;
+            		}
+            		lazy[si]=0;
+        }
+		ll query(ll qs,ll qe,ll si=0,ll ss=0,ll se=n-1){ 
+
+                if(lazy[si]!=0)
+       			{
+            		seg[si]+=lazy[si];
+                    push(si,ss,se,lazy[si]);
+       			}
+       
+       			if(ss>qe||se<qs||ss>se)
+        			return INT_MAX ;
+     			if(ss>=qs&&se<=qe)
+     			    return seg[si];
+     			
+     			ll mid=(se+ss)/2;
+				return min(query(qs,qe,2*si+1,ss,mid),query(qs,qe,2*si+2,mid+1,se));
+		}
+ 
+
+        void update(ll qs,ll qe,ll diff,ll si=0,ll ss=0,ll se=n-1)
+		{
+
+                if(lazy[si]!=0)
+                {
+                       seg[si]+=lazy[si];
+                       push(si,ss,se,lazy[si]);
+                }
+                if(ss>qe||se<qs||ss>se)
+                return ;
+                if(ss>=qs&&se<=qe)
+           	    {
+
+                	seg[si]+=diff;
+           			push(si,ss,se,diff);
+            		return ;
+      		    }
+
+      			ll mid=(se+ss)/2;
+
+      			update(qs,qe,diff,2*si+1,ss,mid);
+    	  		update(qs,qe,diff,2*si+2,mid+1,se);
+
+      			seg[si]=min(seg[2*si+1],seg[2*si+2]);
+		}
+    
+};
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>rmq</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

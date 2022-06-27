@@ -1,0 +1,15 @@
+<snippet>
+	<content><![CDATA[
+/*
+vector<int> permutation(N);
+shuffle(permutation.begin(), permutation.end(), rng);
+auto dist=uniform_int_distribution<int>(l,r);  // range and uniform distribution [l,r] since uniform so selection prob 1/2
+int p = dist(rng);  // random number
+*/
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>random</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
